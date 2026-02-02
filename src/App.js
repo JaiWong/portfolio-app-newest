@@ -70,23 +70,27 @@ function Project({ title, desc, image, link }) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <article className="project-card" onClick={() => setOpen(true)}>
-        <img src={image} alt={title} />
+      <article className="project-card">
+        <img src={image} alt={title} onClick={() => setOpen(true)} />
         <h3>{title}</h3>
         <p className="proj-desc">{desc}</p>
       </article>
 
       {open && (
-        <div className="modal">
-          <div className="modal-body">
-            <button className="modal-close" onClick={() => setOpen(false)}>✕</button>
-            <img src={image} alt={title} />
-            <h3>{title}</h3>
-            <p>{desc}</p>
-            {link && <a className="view-btn" href={link} target="_blank" rel="noreferrer">View Project →</a>}
-          </div>
-        </div>
-      )}
+        <div className="expanded-content">
+          <button className="close-btn" onClick={() => setOpen(false)}>Close</button>
+
+          {image  && <img src={image} alt={title} className="expanded-img" />}
+          {link && (
+            <a className="view-btn" href={link} target="_blank" rel="noreferrer">
+              View Project →
+            </a>
+          )}
+    <h3>{title}</h3>
+    <p>{desc}</p>
+  </div>
+)}
+
     </>
   );
 }
@@ -253,11 +257,26 @@ function Contact() {
   return (
     <section id="contact" className="text-panel">
       <h2>Contact</h2>
+
       <p>Email: <a href="mailto:24001954@myrp.edu.sg">24001954@myrp.edu.sg</a></p>
-      <p>Instagram: <a href="https://instagram.com/jaisticles" target="_blank" rel="noreferrer">@jaisticles</a></p>
+
+      <div className="contact-icons">
+        <a href="https://instagram.com/jaisticles" target="_blank" rel="noreferrer">
+          <i className="fab fa-instagram"></i>
+        </a>
+
+        <a href="https://github.com/YOUR_GITHUB" target="_blank" rel="noreferrer">
+          <i className="fab fa-github"></i>
+        </a>
+
+        <a href="https://linkedin.com/in/YOUR_LINKEDIN" target="_blank" rel="noreferrer">
+          <i className="fab fa-linkedin"></i>
+        </a>
+      </div>
     </section>
   );
 }
+
 
 export default function App() {
   const [mode, setMode] = useState("good"); // "good" | "evil" | "very-evil"
