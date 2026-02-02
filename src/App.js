@@ -265,11 +265,11 @@ function Contact() {
           <i className="fab fa-instagram"></i>
         </a>
 
-        <a href="https://github.com/YOUR_GITHUB" target="_blank" rel="noreferrer">
+        <a href="https://github.com/JaiWong" target="_blank" rel="noreferrer">
           <i className="fab fa-github"></i>
         </a>
 
-        <a href="https://linkedin.com/in/YOUR_LINKEDIN" target="_blank" rel="noreferrer">
+        <a href="https://www.linkedin.com/in/jairus-wong-8038652b8/" target="_blank" rel="noreferrer">
           <i className="fab fa-linkedin"></i>
         </a>
       </div>
