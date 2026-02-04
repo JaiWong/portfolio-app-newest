@@ -1,16 +1,15 @@
 import React from "react";
 
-export default function Navbar({ menuOpen, setMenuOpen }) {
+export default function Navbar({ menuOpen, setMenuOpen, scrolled }) {
   return (
-    <nav className="navbar">
-      <div className="logo">Jairus Wong</div>
+    <nav className={`navbar ${scrolled ? 'scrolled' : ''} ${menuOpen ? 'open' : ''}`}>
+      <a href="#home" className="logo" onClick={() => setMenuOpen(false)} aria-label="Home">Jairus Wong</a>
 
       <div className={`nav-links ${menuOpen ? "active" : ""}`}>
-        <a href="/" onClick={() => setMenuOpen(false)}>Home</a>
-        <a href="/" onClick={() => setMenuOpen(false)}>About</a>
-        <a href="/projects" onClick={() => setMenuOpen(false)}>Projects</a>
-        <a href="/art" onClick={() => setMenuOpen(false)}>Art & Designs</a>
-        <a href="/contact" onClick={() => setMenuOpen(false)}>Contact</a>
+        <a href="/#home" onClick={() => setMenuOpen(false)}>Home</a>
+        <a href="/#projects" onClick={() => setMenuOpen(false)}>Projects</a>
+        <a href="/#art" onClick={() => setMenuOpen(false)}>Art & Designs</a>
+        <a href="/#contact" onClick={() => setMenuOpen(false)}>Contact</a>
       </div>
 
       <button

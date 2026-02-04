@@ -3,21 +3,38 @@ import Skill from "./Skill";
 
 export default function About() {
   return (
-    <section id="about" className="text-panel">
+    <section id="about" className="text-panel about-section">
       <h2>About Me</h2>
-      <p>I'm a developer and designer passionate about UI/UX, coding, and creating beautiful digital projects.</p>
+      <div className="about-content about-grid">
+        {/* Place your personal photo at: public/images/about-photo.jpg */}
+        <img className="about-photo" src="/images/about-photo.jpg" alt="Jairus Wong" />
 
-      <h3>Skills</h3>
+        <div className="about-text">
+          <p className="about-intro">
+            I'm a passionate developer and designer dedicated to crafting beautiful digital experiences. 
+            With a keen eye for detail and a love for clean code, I strive to create interfaces that are 
+            both functional and aesthetically pleasing.
+          </p>
+          <p className="about-detail">
+            My journey in tech combines creative design thinking with technical expertise, 
+            allowing me to bridge the gap between user experience and implementation.
+          </p>
+        </div>
+      </div>
+
+      <h3 className="skills-heading">Technical Skills</h3>
       <div className="skills-grid">
         <Skill name="React" percent={85} />
-        <Skill name="UI/UX" percent={75} />
+        <Skill name="UI/UX Design" percent={75} />
         <Skill name="JavaScript" percent={90} />
         <Skill name="CSS & Animations" percent={80} />
       </div>
+      
+      <div className="cert-btn-container">
         <a href="/certificates" className="cert-btn">
-            View My Certificates →
+          🎓 View My Certificates →
         </a>
-
+      </div>
     </section>
   );
 }
