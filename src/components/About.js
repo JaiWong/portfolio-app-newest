@@ -5,16 +5,21 @@ export default function About() {
   return (
     <section id="about" className="text-panel about-section">
       <h2>About Me</h2>
-      <div className="about-content">
-        <p className="about-intro">
-          I'm a passionate developer and designer dedicated to crafting beautiful digital experiences. 
-          With a keen eye for detail and a love for clean code, I strive to create interfaces that are 
-          both functional and aesthetically pleasing.
-        </p>
-        <p className="about-detail">
-          My journey in tech combines creative design thinking with technical expertise, 
-          allowing me to bridge the gap between user experience and implementation.
-        </p>
+      <div className="about-content about-grid">
+        {/* Place your personal photo at: public/images/about-photo.jpg */}
+        <img className="about-photo" src="/images/about-photo.jpg" alt="Jairus Wong" />
+
+        <div className="about-text">
+          <p className="about-intro">
+            I'm a passionate developer and designer dedicated to crafting beautiful digital experiences. 
+            With a keen eye for detail and a love for clean code, I strive to create interfaces that are 
+            both functional and aesthetically pleasing.
+          </p>
+          <p className="about-detail">
+            My journey in tech combines creative design thinking with technical expertise, 
+            allowing me to bridge the gap between user experience and implementation.
+          </p>
+        </div>
       </div>
 
       <h3 className="skills-heading">Technical Skills</h3>

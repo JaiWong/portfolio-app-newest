@@ -19,19 +19,34 @@ export default function App() {
   const [showEyes, setShowEyes] = useState(false);
   const [shaking, setShaking] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [navElevated, setNavElevated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [timeOfDay, setTimeOfDay] = useState("");
+  const [manualOverride, setManualOverride] = useState(false);
   const canvasRef = useRef(null);
   const speedRef = useRef(0.6);
   const scrollRef = useRef(null);
   const locomotiveScrollRef = useRef(null);
 
+  // Determine time of day and the default mode for it
+  function getTimeOfDayAndDefaultMode() {
+    const hr = new Date().getHours();
+    if (hr >= 6 && hr < 12) return { tod: 'Morning', mode: 'good' };
+    if (hr >= 12 && hr < 18) return { tod: 'Afternoon', mode: 'good' };
+    if (hr >= 18 && hr < 22) return { tod: 'Evening', mode: 'evil' };
+    return { tod: 'Night', mode: 'evil' };
+  }
+
   const cycleMode = () => {
+    // manual override prevents automatic time-based changes from immediately overwriting user choice
+    setManualOverride(true);
     setMode(m => (m === "good" ? "evil" : m === "evil" ? "very-evil" : "good"));
   };
 
   const triggerEyes = () => {
     setShowEyes(true);
     setShaking(true);
+    setManualOverride(true);
     setTimeout(() => {
       setShowEyes(false);
       setShaking(false);
@@ -49,6 +64,20 @@ export default function App() {
       setIsLoading(false);
     }, 1200);
   }, []);
+
+  // Set initial mode based on time of day and keep it updated (unless user manually overrides)
+  useEffect(() => {
+    const applyTimeMode = () => {
+      const { tod, mode: defaultMode } = getTimeOfDayAndDefaultMode();
+      setTimeOfDay(tod);
+      if (!manualOverride) setMode(defaultMode);
+    };
+
+    // apply immediately and then update every minute
+    applyTimeMode();
+    const timer = setInterval(applyTimeMode, 60 * 1000);
+    return () => clearInterval(timer);
+  }, [manualOverride]);
 
   // Initialize Locomotive Scroll
   useEffect(() => {
@@ -74,12 +103,16 @@ export default function App() {
     }
   }, [isLoading]);
 
-  // Show/hide back to top button
+  // Show/hide back to top button & navbar elevation
   useEffect(() => {
     const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 300);
+      const y = window.scrollY || window.pageYOffset;
+      setShowBackToTop(y > 300);
+      setNavElevated(y > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // initialize
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -137,9 +170,21 @@ export default function App() {
 
       draw() {
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = mode === "good" 
-          ? "rgba(120, 180, 120, 0.6)" 
+        // Pulse the radius when the mouse is nearby for a hover effect
+        let r = this.radius;
+        if (mouse.x !== null && mouse.y !== null) {
+          const dx = mouse.x - this.x;
+          const dy = mouse.y - this.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < mouse.radius) {
+            const influence = 1 - dist / mouse.radius;
+            const pulse = 0.6 * Math.sin(performance.now() / 120) * influence;
+            r = Math.max(0.5, this.radius * (1 + pulse));
+          }
+        }
+        ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = mode === "good"
+          ? "rgba(255,155,69,0.9)"
           : "rgba(255, 80, 80, 0.6)";
         ctx.fill();
       }
@@ -171,7 +216,7 @@ export default function App() {
           if (distance < 120) {
             ctx.beginPath();
             ctx.strokeStyle = mode === "good"
-              ? `rgba(120, 180, 120, ${0.15 * (1 - distance / 120)})`
+              ? `rgba(255,155,69, ${0.15 * (1 - distance / 120)})`
               : `rgba(255, 80, 80, ${0.15 * (1 - distance / 120)})`;
             ctx.lineWidth = 0.5;
             ctx.moveTo(particles[i].x, particles[i].y);
@@ -240,53 +285,61 @@ export default function App() {
   }
 
   return (
-  <div className={`app ${themeClass} ${shaking ? "shaking" : ""}`} ref={scrollRef} data-scroll-container>
+    <div className={`app ${themeClass} ${shaking ? "shaking" : ""}`}>
 
-    {showEyes && (
-      <div className="eyes-overlay">
-        <img className="eye-img" src={eyeUrl} alt="eye" />
+      <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+
+      <div ref={scrollRef} data-scroll-container>
+
+        {showEyes && (
+          <div className="eyes-overlay">
+            <img className="eye-img" src={eyeUrl} alt="eye" />
+          </div>
+        )}
+
+        <canvas ref={canvasRef} className="code-rain-canvas" />
+
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <main className="main" data-scroll-section>
+                <Hero />
+                <About />
+                <Projects />
+                <ArtDesigns />
+                <Contact />
+              </main>
+            }
+          />
+
+          <Route path="/certificates" element={<Certificates />} />
+        </Routes>
+
+        <div className="control-row" data-scroll-section>
+          <button className="cta-btn" onClick={cycleMode}>
+            Toggle Mode ({mode})
+          </button>
+          <button className="cta-btn evil-btn" onClick={triggerEyes}>
+            EVIL BUTTON
+          </button>
+
+          <div className="time-mode-info" aria-live="polite">
+            <strong>Time of day:</strong> {timeOfDay || '—'} — <strong>{mode.toUpperCase()}</strong>
+            {manualOverride ? ' (manually selected)' : ' (activated by default)'}
+          </div>
+        </div>
+
+        <footer className="footer" data-scroll-section>
+          <small>© {new Date().getFullYear()} Jairus Wong — Portfolio</small>
+        </footer>
+
+        {showBackToTop && (
+          <button className="back-to-top" onClick={scrollToTop} aria-label="Back to top">
+            ↑
+          </button>
+        )}
+
       </div>
-    )}
-
-    <canvas ref={canvasRef} className="code-rain-canvas" />
-
-    <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <main className="main" data-scroll-section>
-            <Hero />
-            <About />
-            <Projects />
-            <ArtDesigns />
-            <Contact />
-          </main>
-        }
-      />
-
-      <Route path="/certificates" element={<Certificates />} />
-    </Routes>
-
-    <div className="control-row" data-scroll-section>
-      <button className="cta-btn" onClick={cycleMode}>
-        Toggle Mode ({mode})
-      </button>
-      <button className="cta-btn evil-btn" onClick={triggerEyes}>
-        EVIL BUTTON
-      </button>
     </div>
-
-    <footer className="footer" data-scroll-section>
-      <small>© {new Date().getFullYear()} Jairus Wong — Portfolio</small>
-    </footer>
-
-    {showBackToTop && (
-      <button className="back-to-top" onClick={scrollToTop} aria-label="Back to top">
-        ↑
-      </button>
-    )}
-
-  </div>
-);}
+  );}

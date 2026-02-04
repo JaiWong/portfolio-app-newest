@@ -1,9 +1,9 @@
 import React from "react";
 
-export default function Navbar({ menuOpen, setMenuOpen }) {
+export default function Navbar({ menuOpen, setMenuOpen, scrolled }) {
   return (
-    <nav className="navbar">
-      <div className="logo">Jairus Wong</div>
+    <nav className={`navbar ${scrolled ? 'scrolled' : ''} ${menuOpen ? 'open' : ''}`}>
+      <a href="#home" className="logo" onClick={() => setMenuOpen(false)} aria-label="Home">Jairus Wong</a>
 
       <div className={`nav-links ${menuOpen ? "active" : ""}`}>
         <a href="/#home" onClick={() => setMenuOpen(false)}>Home</a>

@@ -4,12 +4,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Orbitron:wght@500;700&display=swap');
 
 :root {
-  --glass: rgba(187, 185, 185, 0.45);
+  --glass: rgba(160, 147, 147, 0.504);
   --glass-strong: rgba(0,0,0,0.65);
   --accent: #ff4b4b;
-  --accent-dim: #774535;
-  --muted: #797777;
-  --text-strong: #2f2e2e;
+  --accent-dim: #ed9a7e;
+  --muted: #aca6a6;
+  --text-strong: #aeabab;
   --section-spacing: 48px;
 }
 
@@ -78,7 +78,7 @@ p { line-height: 1.75; }
 
 /* Text readability */
 .text-panel, .project-card, .modal-body, .expanded-content {
-  color: #beb6b6;
+  color: #a99999;
 }
 .good-mode .text-panel, .good-mode .project-card, .good-mode .modal-body, .good-mode .expanded-content {
   color: #1c1c1c;
@@ -92,6 +92,7 @@ p { line-height: 1.75; }
   position: relative;
   overflow-x: hidden;
   padding-bottom: 80px;
+  padding-top: 70px; /* reserve space for fixed navbar */
   transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .app::after {
@@ -183,6 +184,21 @@ p { line-height: 1.75; }
   border-bottom: 1px solid rgba(255,255,255,0.08);
   animation: slideDown 0.6s ease-out;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  transition: box-shadow 0.24s ease, backdrop-filter 0.24s ease, background 0.24s ease;
+}
+
+/* Elevated state when page content scrolls under the fixed navbar */
+.navbar.scrolled {
+  box-shadow: 0 14px 40px rgba(0,0,0,0.55);
+  backdrop-filter: blur(20px);
+}
+
+/* Ensure navbar and its mobile menu are above other overlays when open */
+.navbar.open {
+  z-index: 10050;
+}
+.navbar.open .nav-links.active {
+  z-index: 10051;
 }
 .logo { 
   font-size: 1.4rem; font-weight: bold; color: white; 
@@ -242,7 +258,9 @@ p { line-height: 1.75; }
     display: flex; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 2000;
     box-shadow: -5px 0 20px rgba(0,0,0,0.5);
   }
-  .nav-links.active { right: 0; }
+  /* When menu is active, push it above overlays and canvas */
+  .nav-links.active { right: 0; z-index: 10051; }
+  .navbar.open .hamburger { z-index: 10060; }
   .nav-links a {
     opacity: 0;
     transform: translateX(30px);
@@ -386,8 +404,11 @@ p { line-height: 1.75; }
   }
   
   .art-modal-content .close-btn {
-    top: 12px;
-    right: 12px;
+    position: sticky;
+    top: 1px;
+    align-self: flex-end;
+    margin: 100;
+    padding: 20px 12px;
   }
 }
 
@@ -402,6 +423,13 @@ p { line-height: 1.75; }
   animation: fadeInUp 0.8s ease-out;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Make paragraphs inside text panels highly legible in dark mode; good-mode is overridden elsewhere */
+.text-panel p {
+  color: rgba(255,255,255,0.95);
+  opacity: 1;
+  line-height: 1.75;
 }
 .text-panel:hover {
   transform: translateY(-5px);
@@ -484,6 +512,62 @@ h1 {
 /* About Section */
 .about-section {
   position: relative;
+}
+
+/* About grid: photo + content */
+.about-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.about-photo {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* Make the grid stack on small screens */
+@media (max-width: 780px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .about-photo { margin: 0 auto; }
+}
+
+/* Darken hero, about, projects, art & contact panels so white copy remains legible */
+.hero-panel,
+.about-section,
+#projects,
+#art,
+#contact {
+  background: rgba(212, 212, 218, 0.575);
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.65);
+}
+
+.hero-panel p,
+.about-section p,
+#projects p,
+#art p,
+#contact p {
+  color: #ffffff;
+}
+
+/* Ensure good-mode doesn't accidentally overwrite these panels with a light background */
+.good-mode .hero-panel,
+.good-mode .about-section,
+.good-mode #projects,
+.good-mode #art,
+.good-mode #contact {
+  background: rgba(19, 19, 20, 0.738);
+  color: #ffffff;
 }
 
 .about-content {
@@ -624,12 +708,14 @@ h1 {
   box-shadow: 0 16px 48px rgba(0,0,0,0.6);
 }
 
-.project-card img, .project-card video {
+.project-card img, .project-card video, .project-card iframe.project-thumb-iframe {
   width: 100%; height: 180px; object-fit: cover; border-radius: 12px;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  display: block;
 }
-.project-card:hover img, .project-card:hover video { 
+.project-card iframe.project-thumb-iframe { pointer-events: none; border: none; }
+.project-card:hover img, .project-card:hover video, .project-card:hover iframe.project-thumb-iframe { 
   transform: scale(1.08);
 }
 
@@ -642,12 +728,14 @@ h1 {
 .project-card:hover h3 {
   color: var(--accent);
 }
-.project-card .description, .art-desc { 
-  font-size: 0.9rem; 
-  opacity: 0.85; 
+.project-card p, .project-card .description, .art-desc { 
+  font-size: 0.95rem; 
+  color: #ffffff; /* brighter, full white for readability */
+  opacity: 1; 
   margin-top: 6px; 
   margin-bottom: 10px;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.18s ease, color 0.18s ease;
+  font-weight: 500;
 }
 .project-card:hover .description,
 .project-card:hover .art-desc {
@@ -724,11 +812,29 @@ h1 {
   border: 1px solid rgba(255,255,255,0.1);
 }
 
-.art-modal-content .close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 10;
+/* Unified modal close button style: sticky/pinned to top inside modal so it stays accessible while content scrolls */
+.expanded-content .close-btn,
+.art-modal-content .close-btn,
+.cert-modal .close-btn,
+.modal .close-btn {
+  position: sticky; /* stays visible inside the scrolling modal */
+  top: 12px;
+  align-self: flex-end; /* keep it at the right edge of the modal content */
+  z-index: 10020;
+  margin: 0 0 12px 0;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.22);
+  white-space: nowrap;
+}
+
+/* keep hover behaviour consistent */
+.expanded-content .close-btn:hover,
+.art-modal-content .close-btn:hover,
+.cert-modal .close-btn:hover,
+.modal .close-btn:hover {
+  background: #ffffffd5;
 }
 
 .art-modal-content .expanded-img {
@@ -839,8 +945,9 @@ h1 {
 }
 
 .modal-close, .close-btn {
-  margin-top: 12px; padding: 8px 16px; border: none; border-radius: 10px;
-  cursor: pointer; background: #fdfdfd8e; backdrop-filter: blur(4px); transition: 0.25s;
+  margin: 0; padding: 10px 16px; border: none; border-radius: 999px;
+  cursor: pointer; background: rgba(255,255,255,0.95); backdrop-filter: blur(4px); transition: 0.25s;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
 }
 .modal-close:hover, .close-btn:hover { background: #ffffffd5; }
 
@@ -873,6 +980,16 @@ h1 {
 .control-row { 
   display: flex; justify-content: center; gap: 20px; margin: 40px 0;
   animation: fadeInUp 1s ease-out 0.8s backwards;
+}
+
+.time-mode-info {
+  margin-left: 12px;
+  font-size: 0.95rem;
+  color: var(--muted);
+  background: rgba(255,255,255,0.03);
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.03);
 }
 .cta-btn {
   padding: 14px 28px; font-size: 1rem; border-radius: 12px; border: none; cursor: pointer;
@@ -999,7 +1116,7 @@ h1 {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: rgba(0,255,0,0.9);
+  color: rgba(0, 255, 13, 0.9);
 }
 
 /* Certificates Page Enhanced */
@@ -1158,12 +1275,12 @@ h1 {
   max-width: 700px;
   margin: 16px auto;
   padding: 20px;
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.05);
   border-radius: 12px;
   border-left: 4px solid var(--accent);
   animation: fadeInUp 0.5s ease-out 0.3s backwards;
-  color: #e8e8e8;
-  font-weight: 400;
+  color: #ffffff; /* full white for legibility */
+  font-weight: 500;
   box-shadow: 0 4px 16px rgba(0,0,0,0.3);
 }
 
@@ -1297,6 +1414,79 @@ html.has-scroll-dragging {
   margin: 32px 0;
 }
 
+/* Contact form */
+.contact-form {
+  width: 100%;
+  max-width: 640px;
+  text-align: left;
+  display: grid;
+  gap: 12px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-row label {
+  font-size: 0.9rem;
+  color: var(--accent-dim);
+}
+
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.4);
+  color: inherit;
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+
+.contact-form .submit-btn {
+  background: linear-gradient(90deg, var(--accent), #ff7b7b);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.contact-form .submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-status {
+  margin-top: 6px;
+  font-size: 0.95rem;
+}
+.form-status.success {
+  color: #8fe28f;
+}
+.form-status.error {
+  color: #ff9b9b;
+}
+
+/* Honeypot (hidden from users but visible to naive bots) */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.hp-field label {
+  display: block;
+  font-size: 0.6rem;
+  opacity: 0.8;
+}
+
 .contact-item {
   display: flex;
   align-items: center;
@@ -1342,11 +1532,15 @@ html.has-scroll-dragging {
 .social-section {
   margin-top: 48px;
   animation: fadeInUp 0.6s ease-out 0.3s backwards;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center children horizontally */
 }
 
 .social-section h3 {
   margin-bottom: 20px;
   color: var(--accent-dim);
+  text-align: center;
 }
 
 /* Back to Top Button */
@@ -1473,7 +1667,8 @@ img {
   background: #111;
 }
 
-.main, .navbar, .footer, .control-row {
+/* Keep the navbar fixed — only main/footer/control-row should be relative */
+.main, .footer, .control-row {
   position: relative;
   z-index: 10;
 }
