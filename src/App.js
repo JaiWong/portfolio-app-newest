@@ -114,7 +114,7 @@ export default function App() {
     // initialize
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [setNavElevated]);
+  }, []);
 
   // Interactive Particle Network Background
   useEffect(() => {
