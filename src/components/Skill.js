@@ -6,6 +6,9 @@ export default function Skill({ name, percent }) {
   const skillRef = useRef(null);
 
   useEffect(() => {
+    // 1. Capture the current ref value in a local variable
+    const currentRef = skillRef.current;
+
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -15,22 +18,24 @@ export default function Skill({ name, percent }) {
       { threshold: 0.3 }
     );
 
-    if (skillRef.current) {
-      observer.observe(skillRef.current);
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (skillRef.current) {
-        observer.unobserve(skillRef.current);
+      // 2. Use the local variable for cleanup
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
-  }, []);
+  }, []); // Empty dependency array means this runs once on mount
 
   useEffect(() => {
     if (isVisible) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         setWidth(percent);
       }, 200);
+      return () => clearTimeout(timer); // Good practice to clean up timers too!
     }
   }, [isVisible, percent]);
 

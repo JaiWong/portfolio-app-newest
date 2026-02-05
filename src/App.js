@@ -19,12 +19,12 @@ export default function App() {
   const [showEyes, setShowEyes] = useState(false);
   const [shaking, setShaking] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const [navElevated, setNavElevated] = useState(false);
+  const [setNavElevated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [timeOfDay, setTimeOfDay] = useState("");
   const [manualOverride, setManualOverride] = useState(false);
   const canvasRef = useRef(null);
-  const speedRef = useRef(0.6);
+
   const scrollRef = useRef(null);
   const locomotiveScrollRef = useRef(null);
 
