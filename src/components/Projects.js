@@ -70,13 +70,13 @@ export default function Projects() {
     {
       title: "Figma Web App Prototype",
       desc: "A polished, high-fidelity mobile app prototype created in Figma.",
-      image: "figma-uiux.png",
+      image: "/figma-uiux.png",
       link: "https://www.figma.com/proto/YJRgoD4P5obXbaa4i9UV6o/Hifi?node-id=0-1",
     },
     {
       title: "Pizza Store Web App",
       desc: "A React + Vercel pizza ordering web application.",
-      image: "pizzaApp.png",
+      image: "/pizzaApp.png",
       link: "https://pizza-store-six-dusky.vercel.app/",
     },
     {
@@ -92,7 +92,7 @@ export default function Projects() {
     {
       title: "CA-2 Web App",
       desc: "A deployed CA-2 project hosted on Vercel. Live demo with responsive layout and features preview.",
-      image: "images/ca2-thumbnail.svg",
+      image: "/images/ca2-thumbnail.svg",
       link: "https://ca-2-c219-gzm6.vercel.app/",
     }
   ];

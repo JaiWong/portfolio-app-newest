@@ -12,15 +12,15 @@ export default function ArtDesigns() {
     },
     { 
       title: "Typography", 
-      image: "colour-typography.png", 
+      image: "/colour-typography.png", 
       pdf: "/L10JairusWongTypography.pdf", 
       description: "Typography study.",
       fullDescription: "An in-depth exploration of typography principles, focusing on the relationship between color and type. This project demonstrates understanding of hierarchy, spacing, and visual impact through thoughtful typographic design."
     },
     { 
       title: "Portfolio Concept", 
-      image: "portfolioH.png", 
-      pdf: "portfolio-hypothetical.pdf", 
+      image: "/portfolioH.png", 
+      pdf: "/portfolio-hypothetical.pdf", 
       description: "Experimental portfolio design.",
       fullDescription: "A hypothetical portfolio design exploring innovative layouts and user experience patterns. This concept showcases modern design trends, interactive elements, and a unique approach to personal branding."
     },
