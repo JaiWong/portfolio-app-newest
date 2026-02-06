@@ -19,7 +19,6 @@ export default function App() {
   const [showEyes, setShowEyes] = useState(false);
   const [shaking, setShaking] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const [navElevated, setNavElevated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [timeOfDay, setTimeOfDay] = useState("");
   const [manualOverride, setManualOverride] = useState(false);
@@ -103,12 +102,11 @@ export default function App() {
     }
   }, [isLoading]);
 
-  // Show/hide back to top button & navbar elevation
+  // Show/hide back to top button
   useEffect(() => {
     const handleScroll = () => {
       const y = window.scrollY || window.pageYOffset;
       setShowBackToTop(y > 300);
-      setNavElevated(y > 20);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     // initialize
