@@ -3,17 +3,21 @@ import "./App.css";
 import LocomotiveScroll from 'locomotive-scroll';
 import 'locomotive-scroll/dist/locomotive-scroll.css';
 
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
 import Projects from "./components/Projects";
+import ProjectDetail from "./components/ProjectDetail";
 import ArtDesigns from "./components/ArtDesigns";
 import Contact from "./components/Contact";
 import Certificates from "./components/Certificates";
 
 
 export default function App() {
+  const location = useLocation();
+  const isProjectDetailPage = location.pathname.startsWith('/project/');
+  
   const [mode, setMode] = useState("good"); // good | evil | very-evil
   const [menuOpen, setMenuOpen] = useState(false);
   const [showEyes, setShowEyes] = useState(false);
@@ -78,9 +82,9 @@ export default function App() {
     return () => clearInterval(timer);
   }, [manualOverride]);
 
-  // Initialize Locomotive Scroll
+  // Initialize Locomotive Scroll (only on main page, not on project detail pages)
   useEffect(() => {
-    if (!isLoading && scrollRef.current) {
+    if (!isLoading && scrollRef.current && !isProjectDetailPage) {
       locomotiveScrollRef.current = new LocomotiveScroll({
         el: scrollRef.current,
         smooth: true,
@@ -100,7 +104,7 @@ export default function App() {
         }
       };
     }
-  }, [isLoading]);
+  }, [isLoading, isProjectDetailPage]);
 
   // Show/hide back to top button
   useEffect(() => {
@@ -311,6 +315,7 @@ export default function App() {
             }
           />
 
+          <Route path="/project/:id" element={<ProjectDetail />} />
           <Route path="/certificates" element={<Certificates />} />
         </Routes>
 
