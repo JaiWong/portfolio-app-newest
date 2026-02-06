@@ -90,8 +90,8 @@ export default function Projects() {
       embedSrc: "https://embed.figma.com/design/2EB53aMEfwd4NQUhXtuzZS/CA-FINAL?node-id=76-182&embed-host=share"
     },
     {
-      title: "CA-2 Web App",
-      desc: "A deployed CA-2 project hosted on Vercel. Live demo with responsive layout and features preview.",
+      title: "Community Aid Web App",
+      desc: "A deployed CA-2 project hosted on Vercel. Live demo with responsive layout and features preview. The app ",
       image: "/images/ca2-thumbnail.svg",
       link: "https://ca-2-c219-gzm6.vercel.app/",
     }
