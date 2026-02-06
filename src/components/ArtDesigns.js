@@ -8,7 +8,8 @@ export default function ArtDesigns() {
       title: "Animation", 
       video: "/sotong-animation.mp4", 
       description: "Digital animation work.",
-      fullDescription: "A comprehensive digital animation project featuring character animation, motion design, and visual effects. This piece showcases creative storytelling through dynamic motion graphics."
+      fullDescription: "A comprehensive digital animation project featuring character animation, motion design, and visual effects. This piece showcases creative storytelling through dynamic motion graphics.",
+      instagramLink: "https://www.instagram.com/jairirus/"
     },
     { 
       title: "Typography", 
@@ -74,6 +75,16 @@ export default function ArtDesigns() {
                   rel="noreferrer"
                 >
                   📄 Open PDF in New Tab
+                </a>
+              )}
+              {artworks[selectedIndex].instagramLink && (
+                <a 
+                  href={artworks[selectedIndex].instagramLink} 
+                  className="view-btn" 
+                  target="_blank" 
+                  rel="noreferrer"
+                >
+                  📸 View on Instagram
                 </a>
               )}
             </div>
