@@ -108,7 +108,7 @@ export default function Contact() {
           <a href="https://github.com/JaiWong" target="_blank" rel="noreferrer" title="GitHub">
             <i className="fab fa-github"></i>
           </a>
-          <a href="https://linkedin.com/in/jairus-wong" target="_blank" rel="noreferrer" title="LinkedIn">
+          <a href="https://www.linkedin.com/in/jairus-wong-8038652b8/" target="_blank" rel="noreferrer" title="LinkedIn">
             <i className="fab fa-linkedin"></i>
           </a>
         </div>
